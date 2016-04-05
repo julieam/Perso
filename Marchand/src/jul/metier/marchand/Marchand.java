@@ -1,15 +1,20 @@
 package jul.metier.marchand;
 
+import java.io.Serializable;
+
 import jul.metier.stock.StockList;
 
-public class Marchand extends Commercant {
+public class Marchand extends Commercant implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private StockList stock;
 	private StockList stockPrive;
 	private StockList stockFamille;
 
 	public Marchand() {
-		stock = new StockList("nom");
 		stockPrive = new StockList("nom");
 		stockFamille = new StockList("nom");
 

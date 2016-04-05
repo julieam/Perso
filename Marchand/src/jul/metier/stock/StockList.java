@@ -7,6 +7,11 @@ import jul.metier.produits.Consommable;
 import jul.metier.produits.Produits;
 
 public class StockList extends ArrayList<Produits> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static int NUM_STOCK = 0;
 
 	private String nom;

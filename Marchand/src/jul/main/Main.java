@@ -20,8 +20,33 @@ public class Main {
 
 	public static void main(String[] args) {
 		Main main = new Main();
-		main.save();
-		main.recup();
+//		main.save();
+//		main.recup();
+		main.saveMarchand();
+	}
+
+	private void saveMarchand() {
+		Marchand m = new Marchand(0, 0, 200);
+		m.setNomDuMarchand("Apu");
+		for (int i = 0; i < 10; i++) {
+			m.getMonStock().add(new Alimentaire("Aliment " + i, 2, i + 1));
+			m.getMonStock().add(new Alimentaire("Aliment " + i, 2, i + 1));
+			m.getMonStock().add(new Consommable("Consommable " + i, 2, i + 1));
+		}
+		File fMarchand = new File("marchand.ser");
+		ObjectOutputStream o = null;
+		try {
+			o = new ObjectOutputStream(new FileOutputStream(fMarchand));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				o.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
 	}
 
 	private void recup() {

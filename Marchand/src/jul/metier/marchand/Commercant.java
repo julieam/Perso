@@ -1,8 +1,14 @@
 package jul.metier.marchand;
 
+import java.io.Serializable;
+
 import jul.metier.stock.StockList;
 
-public class Commercant {
+public class Commercant implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String nomDuMarchand;
 	private StockList monStock;
 
