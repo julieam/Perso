@@ -117,7 +117,7 @@ public class Main {
 
 	public StockList afficherStock(StockList stock) {
 		for (Produits produits : stock) {
-			System.out.println(produits + ", ");
+			System.out.println(produits.toString() + ", ");
 		}
 		return stock;
 
