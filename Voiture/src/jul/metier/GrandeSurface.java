@@ -29,7 +29,7 @@ public class GrandeSurface implements EssenceInterface {
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " " + citerne;
+		return getClass().getName() + " " + getCiterne();
 	}
 
 }

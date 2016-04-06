@@ -33,7 +33,7 @@ public class StationService implements EssenceInterface {
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " " + cuve;
+		return getClass().getName() + " " + getCuve();
 	}
 
 }

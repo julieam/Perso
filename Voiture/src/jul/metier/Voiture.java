@@ -4,8 +4,9 @@ public class Voiture {
 	private float reservoir;
 	private float qteMaxReservoir;
 
-	public Voiture() {
-		reservoir = 50;
+	public Voiture(float qtMaxReservoir) {
+		reservoir = 0;
+		this.qteMaxReservoir = qtMaxReservoir;
 	}
 
 	public Voiture(float reservoir, float qteMaxReservoir) {
@@ -35,7 +36,7 @@ public class Voiture {
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " " + reservoir;
+		return getClass().getName() + " " + getReservoir();
 		// getClass() de la classe String et getName()de la classe String
 		// permet d'envoyer le toString lors de l'envoi quelque soit l'objet
 	}
