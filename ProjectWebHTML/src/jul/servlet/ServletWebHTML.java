@@ -1,6 +1,8 @@
 package jul.servlet;
 
 import java.io.IOException;
+
+import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;//bibliothèque
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,11 +18,11 @@ public class ServletWebHTML extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
-     * Default constructor. 
-     */
-    public ServletWebHTML() {
-        // TODO Auto-generated constructor stub
-    }
+	 * Default constructor.
+	 */
+	public ServletWebHTML() {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see Servlet#init(ServletConfig)
@@ -30,17 +32,21 @@ public class ServletWebHTML extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		System.out.println("je passe par la méthode get");
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
