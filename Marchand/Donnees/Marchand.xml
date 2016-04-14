@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMMERCANT[
+<!ELEMENT Commercant (Marchand*) >
+	<!ELEMENT Marchand (StockList+)>
+		<!ATTLIST Marchand nomMarchand CDATA #REQUIRED>
+		<!ELEMENT StockList (Alimentaire*,Consommable*)>
+		<!ATTLIST StockList nomStock CDATA #REQUIRED>
+			<!ELEMENT Alimentaire EMPTY >
+				<!ATTLIST Alimentaire nom CDATA #REQUIRED>
+				<!ATTLIST Alimentaire poids CDATA #REQUIRED>
+				<!ATTLIST Alimentaire prixUnitaire CDATA #REQUIRED>
+			<!ELEMENT Consommable EMPTY >
+				<!ATTLIST Consommable nom CDATA #REQUIRED>
+				<!ATTLIST Consommable qte CDATA #REQUIRED>
+				<!ATTLIST Consommable prixUnitaire CDATA #REQUIRED>
+
+]>
+
+<Commercant>
+	<Marchand nomMarchand='Apu'>
+		<StockList nomStock='monStock'>
+			<Alimentaire nom='Banane' poids='12' prixUnitaire='0.99' />
+			<Alimentaire nom='Patate' poids='5' prixUnitaire='1.8' />
+			<Consommable nom='Casserole' qte='3' prixUnitaire='12' />
+
+		</StockList>
+		<StockList nomStock='StockPrive'>
+			<Alimentaire nom='Banane' poids='12' prixUnitaire='0.99' />
+			<Alimentaire nom='Patate' poids='5' prixUnitaire='1.8' />
+			<Consommable nom='Casserole' qte='3' prixUnitaire='12' />
+
+		</StockList>
+		<StockList nomStock='StockFamille'>
+			<Alimentaire nom='Banane' poids='12' prixUnitaire='0.99' />
+			<Alimentaire nom='Patate' poids='5' prixUnitaire='1.8' />
+			<Consommable nom='Casserole' qte='3' prixUnitaire='12' />
+
+
+		</StockList>
+
+	</Marchand>
+	<Marchand nomMarchand='Robert'>
+		<StockList nomStock='monStock'>
+			<Alimentaire nom='Fromage' poids='12' prixUnitaire='0.99' />
+			<Alimentaire nom='Patate' poids='5' prixUnitaire='1.8' />
+			<Consommable nom='Casserole' qte='3' prixUnitaire='12' />
+
+		</StockList>
+		<StockList nomStock='StockPrive'>
+			<Alimentaire nom='Fromage' poids='12' prixUnitaire='0.99' />
+			<Alimentaire nom='Patate' poids='5' prixUnitaire='1.8' />
+			<Consommable nom='Casserole' qte='3' prixUnitaire='12' />
+
+		</StockList>
+		<StockList nomStock='StockFamille'>
+			<Alimentaire nom='Fromage' poids='12' prixUnitaire='0.99' />
+			<Alimentaire nom='Patate' poids='5' prixUnitaire='1.8' />
+			<Consommable nom='Casserole' qte='3' prixUnitaire='12' />
+
+
+		</StockList>
+
+	</Marchand>
+</Commercant>

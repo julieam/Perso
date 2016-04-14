@@ -15,6 +15,7 @@ public class Marchand extends Commercant implements Serializable {
 	private StockList stockFamille;
 
 	public Marchand() {
+		stock = new StockList("nom");
 		stockPrive = new StockList("nom");
 		stockFamille = new StockList("nom");
 

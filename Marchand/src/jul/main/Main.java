@@ -1,8 +1,11 @@
 package jul.main;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -20,18 +23,111 @@ public class Main {
 
 	public static void main(String[] args) {
 		Main main = new Main();
-//		main.save();
-//		main.recup();
-		main.saveMarchand();
+		// main.save();
+		// main.recup();
+		// main.saveMarchand();
+		// main.lireFichier();
+		main.chargeXml();
 	}
 
-	private void saveMarchand() {
+	private void chargeXml() {
+		StockList stock = null;
+		File file = new File("Donnees/Stock.xml");
+		BufferedReader buf = null;
+		try {
+			buf = new BufferedReader(new FileReader(file));
+			String line = buf.readLine();
+			while (line != null) {
+				if (line.contains("<StockList")) {
+					String nomStockCharge = extraitAtt(line, "nomStock='");
+					stock = new StockList();
+					stock.setNom(nomStockCharge);
+				} else if (line.contains("<Alimentaire")) {
+					String nomCharge = extraitAtt(line, "nom='");
+					String poidsCharge = extraitAtt(line, "poids='");
+					String prixUnitaireCharge = extraitAtt(line, "prixUnitaire='");
+					// float poids = Float.valueOf(poidsCharge).floatValue();
+					// pas necessaire, java fait lui-mêmela conversion dans le
+					// constructeur
+					// float prixUnitaire =
+					// Float.valueOf(prixUnitaireCharge).floatValue();
+					Alimentaire ali = new Alimentaire(nomCharge, poidsCharge, prixUnitaireCharge);
+					stock.add(ali);
+				} else if (line.contains("<Consommable")) {
+					String nomCharge = extraitAtt(line, "nom='");
+					String qteCharge = extraitAtt(line, "qte='");
+					String prixUnitaireCharge = extraitAtt(line, "prixUnitaire='");
+					Consommable conso = new Consommable(nomCharge, qteCharge, prixUnitaireCharge);
+					stock.add(conso);
+				} else if (line.contains("</StockList")) {
+					for (Produits produits : stock) {
+						System.out.println(produits.toString());
+					}
+
+				}
+				line = buf.readLine();
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				buf.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
+	}
+
+	private String extraitAtt(String line, String ch) {
+		String res = "";
+		String newLine = line.replace("\"", "'");
+		// antislash car " interdit dans XML donc on écrit "\"
+		// \t veut dire tabulation (dans XML?)
+		int deb = newLine.indexOf((ch));
+		int fin = newLine.indexOf("'", deb + ch.length());
+		res = newLine.substring(deb + ch.length(), fin);
+		return res;
+	}
+
+	private void lireFichier() {
+		BufferedReader reader = null;
+		// BufferedReader f=new BufferedReader("");
+		// f.
+		try {
+			reader = new BufferedReader(new FileReader("C:/DevFormation/GIT/Perso/Marchand/Donnees/Stock.xml"));
+			String chaine = reader.readLine();
+			while (chaine != null) {
+				if (chaine.contains("<StockList ")) {
+					System.out.print((chaine.substring(chaine.indexOf("n"), chaine.lastIndexOf("'"))));
+				}
+
+				chaine = reader.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				reader.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
+	}
+
+	private void saveMarchand() {// a corriger erreur constructeur
 		Marchand m = new Marchand(0, 0, 200);
 		m.setNomDuMarchand("Apu");
 		for (int i = 0; i < 10; i++) {
-			m.getMonStock().add(new Alimentaire("Aliment " + i, 2, i + 1));
-			m.getMonStock().add(new Alimentaire("Aliment " + i, 2, i + 1));
-			m.getMonStock().add(new Consommable("Consommable " + i, 2, i + 1));
+			m.getStock().add(new Alimentaire("Aliment " + i, 2, i + 1));
+			m.getStock().add(new Alimentaire("Aliment " + i, 2, i + 1));
+			m.getStock().add(new Consommable("Consommable " + i, 2, i + 1));
 		}
 		File fMarchand = new File("marchand.ser");
 		ObjectOutputStream o = null;

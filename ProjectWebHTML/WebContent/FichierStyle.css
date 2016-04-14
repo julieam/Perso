@@ -1,0 +1,10 @@
+@CHARSET "ISO-8859-1";
+
+p {
+	color: purple;
+}
+
+#promo {
+	font-family: castellar;
+	color: blue;
+}
