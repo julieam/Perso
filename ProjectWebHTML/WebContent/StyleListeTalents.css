@@ -1,0 +1,36 @@
+@CHARSET "ISO-8859-1";
+
+#conteneur {
+	width: 700px;
+	heigth: 600px;
+	margin-left: 340px;
+	margin-top: 340px;
+	text-align: center;
+}
+
+#contenu {
+	text-align: left;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+th {
+	width: 100px;
+	heigth: 200px;
+	text-align: center;
+	font-weight: normal;
+}
+
+caption {
+	font-weight: bold;
+	font-size: 20px;
+	color: red;
+}
+
+td {
+	text-align: center;
+	width: 100px;
+	heigth: 200px;
+}
