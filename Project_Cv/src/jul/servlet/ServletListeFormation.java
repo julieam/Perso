@@ -38,11 +38,16 @@ public class ServletListeFormation extends HttpServlet {
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
-	public void init(ServletConfig config) throws ServletException {
+	@Override
+	public void init() throws ServletException {
 		listeFormation = new ListeFormation();
+		chargerListeFormation();
 		// charge la liste des formations
+	}
+
+	public void chargerListeFormation() {
 		BufferedReader reader = null;
-		File file = new File("../workspace/Project_Cv/WebContent/WEB-INF/xml/formation.xml");
+		File file = new File("/Project_Cv/WebContent/WEB-INF/xml/formation.xml");
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			String chaine = reader.readLine();
@@ -93,42 +98,38 @@ public class ServletListeFormation extends HttpServlet {
 		// créer un flux de sortie
 		// charger la page html à afficher
 		// envoyer cette page dans le flux de sortie.
-		PrintWriter out1 = response.getWriter();
-		out1.println("j'affiche quelque chose");
+		PrintWriter out = response.getWriter();
+		File file = new File("../GIT/Perso/Project_Cv/WebContent/WEB-INF/Page/pageListeFormation.html");
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		String line = reader.readLine();
+		while (line != null) {
+			if (line.contains("%%date%%") || line.contains("%%lieu%%") || line.contains("%%domaine%%")
+					|| line.contains("%%name%%") || line.contains("%%valeur%%")) {
+				affListeFormation(out);
 
-		listeFormation = new ListeFormation();
-		BufferedReader reader = null;
-		PrintWriter out = null;
-		File file = new File("../workspace/Project_Cv/WebContent/WEB-INF/Page/pageListeFormation.html");
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			String chaine = reader.readLine();
-			while (chaine != null) {
-				if (chaine.contains("%%name%%")) {
-					String date = extraitAttHtml(chaine, "%%date%%");
-					String lieu = extraitAttHtml(chaine, "%%lieu%%");
-					String domaine = extraitAttHtml(chaine, "%%domaine%%");
-				}
-				chaine = reader.readLine();
-				out = response.getWriter();
-				out.println(chaine);
+			} else {
+				out.println(line);
 			}
+			line = reader.readLine();
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				reader.close();
-				out.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
 		}
 
-		// response.getWriter().append("Served at:
-		// ").append(request.getContextPath());
+	}
+
+	private void affListeFormation(PrintWriter out) {
+		for (Formation formation : listeFormation) {
+			out.println("<tr><th style=\"width: 5%\">sel</th><th style=\"width: 20%\">"+formation.getDateFormation()+"</th><th style=\"width 50%\">"+formation.getLieuFormation()+"</th><th style=\"width: 30%\">"+formation.getDomaineFormation()+"</th></tr>");
+			// out.println("<tr>");
+			// out.println("<th style=\"width:5%\">sel</td>");
+			// out.println("<th style=\"width:30%\">" +
+			// formation.getDateFormation() + "</th>");
+			// out.println("<th style=\"width:30%\">" +
+			// formation.getLieuFormation() + "</th></tr>");
+			// out.println("<th style=\"width:30%\">" +
+			// formation.getDomaineFormation() + "</th></tr>");
+			// out.println("</tr>");
+		}
+
 	}
 
 	private String extraitAttHtml(String line, String ch) {
