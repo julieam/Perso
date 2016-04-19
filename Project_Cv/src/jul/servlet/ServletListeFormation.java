@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,8 +41,6 @@ public class ServletListeFormation extends HttpServlet {
 	 * Default constructor.
 	 */
 
-	private ListeFormation listeFormation;
-
 	public ServletListeFormation() {
 		super();
 	}
@@ -51,13 +50,10 @@ public class ServletListeFormation extends HttpServlet {
 	 */
 	@Override
 	public void init() throws ServletException {
-		listeFormation = new ListeFormation();
-		chargerListeFormation();
-		chargerListeEtudiants();
-		// charge la liste des formations
+
 	}
 
-	private void chargerListeEtudiants() {
+	private void chargerListeEtudiants(ListeFormation listeFormation) {
 		File fLecture = new File("../GIT/Perso/Project_Cv/WebContent/WEB-INF/xml/Etudiants.xml");
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
@@ -101,11 +97,14 @@ public class ServletListeFormation extends HttpServlet {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+
 		}
 
 	}
 
-	public void chargerListeFormation() {
+	public ListeFormation chargerListeFormation() {
+		ListeFormation listeFormation = new ListeFormation();
 		BufferedReader reader = null;
 		File file = new File("C:/DevFormation/GIT/Perso/Project_Cv/WebContent/WEB-INF/xml/formation.xml");
 		try {
@@ -136,6 +135,7 @@ public class ServletListeFormation extends HttpServlet {
 				e2.printStackTrace();
 			}
 		}
+		return listeFormation;
 	}
 
 	private String extraitAtt(String line, String ch) {
@@ -153,6 +153,13 @@ public class ServletListeFormation extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		ListeFormation listeFormation = chargerListeFormation();
+		chargerListeEtudiants(listeFormation);
+		// permet de sauvegarder les données de cette servlett et de s'en servir
+		// dans une autre
+		session.setAttribute("listeForm", listeFormation);
+
 		// récupération des paramètres d'utilisateurs
 		// contrôler les paramètres utilisateurs
 		// créer un flux de sortie
@@ -177,6 +184,7 @@ public class ServletListeFormation extends HttpServlet {
 	}
 
 	private void affListeFormation(PrintWriter out, String line) {
+		ListeFormation listeFormation = new ListeFormation();
 		for (int i = 0; i < listeFormation.size(); i++) {
 			// out.println("<tr><th style=\"width: 5%\">sel</th><th
 			// style=\"width: 20%\">" + formation.getDateFormation()
@@ -200,11 +208,16 @@ public class ServletListeFormation extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// recuperation de parametre au travers de la requete req
+		HttpSession session = req.getSession();
+		ListeFormation listeFormation = (ListeFormation) session.getAttribute("listeForm");
+
 		String sIdFormation = req.getParameter("boutonFormation");
+		// permet de récupérer le clic du bouton
 		int idFormation = Integer.valueOf(sIdFormation).intValue();
 		ListeEtudiants lstEtudiants = null;
 		if (idFormation >= 0 && idFormation < listeFormation.size()) {
 			Formation formation = listeFormation.get(idFormation);
+			session.setAttribute("formation", formation);
 			lstEtudiants = formation.getListeEtudiants();
 			PrintWriter out = resp.getWriter();
 			File file = new File("../GIT/Perso/Project_Cv/WebContent/WEB-INF/Page/pageListeEtudiant.html");
