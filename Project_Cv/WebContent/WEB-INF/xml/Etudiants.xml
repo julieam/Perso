@@ -5,6 +5,19 @@
 	</formation>
 	<formation id="1">
 		<etudiant nom="Capel" prenom="Adeline" metier="Mathematiques" mail="adeline@gmail.fr" />
+		<etudiant nom="Gros" prenom="Allan" metier="Textile" mail="allan@gmail.fr" />
+		<etudiant nom="Jullien" prenom="Amandine" metier="Biologiste" mail="jullien.amandine@hotmail.fr" />
+		<etudiant nom="Leroy" prenom="Floriane" metier="Genie des materiaux" mail="floriane@gmail.fr" />
+		<etudiant nom="Dumon" prenom="Alexia" metier="Agronomie" mail="alexia@gmail.fr" />
+		<etudiant nom="Raymond" prenom="Mathias" metier="Biologiste" mail="mathias@gmail.fr" />
+		<etudiant nom="Jourdain" prenom="Cedric" metier="informatique" mail="cedric@gmail.fr" />
+		<etudiant nom="Walentek" prenom="Patrick" metier="Biologiste" mail="patrick@gmail.fr" />
+		<etudiant nom="Kadri" prenom="Souad" metier="Chimiste" mail="souad@gmail.fr" />
+		<etudiant nom="Demontrond" prenom="Baptiste" metier="Materiaux" mail="baptiste@gmail.fr" />
+		<etudiant nom="Dufourcq" prenom="Damien" metier="informatique" mail="damien@gmail.fr" />
+	</formation>
+	<formation id="2">
+		<etudiant nom="Martin" prenom="Paul" metier="Physicien" mail="martin@gmail.fr" />
 	</formation>
 
 </listeEtudiant>

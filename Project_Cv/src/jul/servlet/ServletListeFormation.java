@@ -41,7 +41,6 @@ public class ServletListeFormation extends HttpServlet {
 	 */
 
 	private ListeFormation listeFormation;
-	private ListeEtudiants listeEtudiant;
 
 	public ServletListeFormation() {
 		super();
@@ -53,7 +52,6 @@ public class ServletListeFormation extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		listeFormation = new ListeFormation();
-		listeEtudiant = new ListeEtudiants();
 		chargerListeFormation();
 		chargerListeEtudiants();
 		// charge la liste des formations
@@ -76,7 +74,9 @@ public class ServletListeFormation extends HttpServlet {
 				if (liste.item(i).getNodeType() == Node.ELEMENT_NODE) {
 					Element eFormation = (Element) liste.item(i);
 					NodeList lFormation = eFormation.getChildNodes();
-					eFormation.getAttribute("id");
+					String id = eFormation.getAttribute("id");
+					Formation form = listeFormation.get(Integer.valueOf(id).intValue());
+
 					// recupere chaque element du fichier xml
 
 					for (int j = 0; j < lFormation.getLength(); j++) {
@@ -87,9 +87,8 @@ public class ServletListeFormation extends HttpServlet {
 							String metier = eEtudiant.getAttribute("metier");
 							String mail = eEtudiant.getAttribute("mail");
 							String commentaire = eEtudiant.getTextContent();
-							Etudiant etudiant = new Etudiant();
-							Formation formation = listeFormation.get(i);
-							formation.getListeEtudiants().add(etudiant);
+							Etudiant etudiant = new Etudiant(nom, prenom, metier, mail, commentaire, form);
+							form.getListeEtudiants().add(etudiant);
 						}
 					}
 				}
@@ -186,7 +185,7 @@ public class ServletListeFormation extends HttpServlet {
 			// + formation.getDomaineFormation() + "</th></tr>");
 			Formation formation = listeFormation.get(i);
 			String ligneAAfficher = line;
-			ligneAAfficher = ligneAAfficher.replace("%%name%%", "un chiffre");
+			ligneAAfficher = ligneAAfficher.replace("%%name%%", "boutonFormation");
 			ligneAAfficher = ligneAAfficher.replace("%%valeur%%", Integer.toString(i));
 			ligneAAfficher = ligneAAfficher.replace("%%date%%", formation.getDateFormation());
 			ligneAAfficher = ligneAAfficher.replace("%%lieu%%", formation.getLieuFormation());
@@ -200,21 +199,38 @@ public class ServletListeFormation extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter out = resp.getWriter();
-		File file = new File("../GIT/Perso/Project_Cv/WebContent/WEB-INF/Page/pageListeEtudiant.html");
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		String line = reader.readLine();
-		while (line != null) {
-			for (Formation formation : listeFormation) {
-				if (line.contains("%%nom%%") || line.contains("%%prenom%%") || line.contains("%%metier%%")
-						|| line.contains("%%mail%%") || line.contains("%%valeur%%")) {
-
+		// recuperation de parametre au travers de la requete req
+		String sIdFormation = req.getParameter("boutonFormation");
+		int idFormation = Integer.valueOf(sIdFormation).intValue();
+		ListeEtudiants lstEtudiants = null;
+		if (idFormation >= 0 && idFormation < listeFormation.size()) {
+			Formation formation = listeFormation.get(idFormation);
+			lstEtudiants = formation.getListeEtudiants();
+			PrintWriter out = resp.getWriter();
+			File file = new File("../GIT/Perso/Project_Cv/WebContent/WEB-INF/Page/pageListeEtudiant.html");
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line = reader.readLine();
+			while (line != null) {
+				if (line.contains("%%nom%%")) {
+					for (int i = 0; i < lstEtudiants.size(); i++) {
+						String ligneAAfficher = line;
+						ligneAAfficher = ligneAAfficher.replace("%%name%%", "boutonCV");
+						ligneAAfficher = ligneAAfficher.replace("%%valeur%%", Integer.toString(i));
+						ligneAAfficher = ligneAAfficher.replace("%%nom%%", lstEtudiants.get(i).getNom());
+						ligneAAfficher = ligneAAfficher.replace("%%prenom%%", lstEtudiants.get(i).getPrenom());
+						ligneAAfficher = ligneAAfficher.replace("%%metier%%", lstEtudiants.get(i).getMetier());
+						ligneAAfficher = ligneAAfficher.replace("%%mail%%", lstEtudiants.get(i).getMail());
+						out.println(ligneAAfficher);
+					}
+				} else {
+					out.println(line);
 				}
-
+				line = reader.readLine();
 			}
+		} else {
 
-			super.doPost(req, resp);
 		}
+
 	}
 
 }

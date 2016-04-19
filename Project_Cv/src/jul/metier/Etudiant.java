@@ -7,6 +7,7 @@ public class Etudiant {
 	private String metier;
 	private String mail;
 	private String commentaire;
+	private Formation form;
 
 	public Etudiant() {
 		nom = "";
@@ -14,15 +15,17 @@ public class Etudiant {
 		metier = "";
 		mail = "";
 		commentaire = "";
+		form = null;
 	}
 
-	public Etudiant(String nom, String prenom, String metier, String mail, String commentaire) {
+	public Etudiant(String nom, String prenom, String metier, String mail, String commentaire, Formation form) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
 		this.metier = metier;
 		this.mail = mail;
 		this.commentaire = commentaire;
+		this.form = form;
 	}
 
 	public String getNom() {
