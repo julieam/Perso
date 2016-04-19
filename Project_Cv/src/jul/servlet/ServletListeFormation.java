@@ -14,8 +14,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import jul.metier.Etudiant;
 import jul.metier.Formation;
+import jul.metier.ListeEtudiants;
 import jul.metier.ListeFormation;
 
 /**
@@ -30,6 +41,7 @@ public class ServletListeFormation extends HttpServlet {
 	 */
 
 	private ListeFormation listeFormation;
+	private ListeEtudiants listeEtudiant;
 
 	public ServletListeFormation() {
 		super();
@@ -41,13 +53,62 @@ public class ServletListeFormation extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		listeFormation = new ListeFormation();
+		listeEtudiant = new ListeEtudiants();
 		chargerListeFormation();
+		chargerListeEtudiants();
 		// charge la liste des formations
+	}
+
+	private void chargerListeEtudiants() {
+		File fLecture = new File("../GIT/Perso/Project_Cv/WebContent/WEB-INF/xml/Etudiants.xml");
+		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+			Document document = documentBuilder.parse(fLecture);// effectue
+			// l'ensemble de la lecture du fichier
+			// ligne 26 et 27 permet d'obtenir la fabrique
+
+			Element racine = document.getDocumentElement();
+			// permet de chercher les elements du document
+			NodeList liste = racine.getChildNodes();
+			int nbList = liste.getLength();
+			for (int i = 0; i < nbList; i++) {
+				if (liste.item(i).getNodeType() == Node.ELEMENT_NODE) {
+					Element eFormation = (Element) liste.item(i);
+					NodeList lFormation = eFormation.getChildNodes();
+					eFormation.getAttribute("id");
+					// recupere chaque element du fichier xml
+
+					for (int j = 0; j < lFormation.getLength(); j++) {
+						if (lFormation.item(j).getNodeType() == Node.ELEMENT_NODE) {
+							Element eEtudiant = (Element) lFormation.item(j);
+							String nom = eEtudiant.getAttribute("nom");
+							String prenom = eEtudiant.getAttribute("prenom");
+							String metier = eEtudiant.getAttribute("metier");
+							String mail = eEtudiant.getAttribute("mail");
+							String commentaire = eEtudiant.getTextContent();
+							Etudiant etudiant = new Etudiant();
+							Formation formation = listeFormation.get(i);
+							formation.getListeEtudiants().add(etudiant);
+						}
+					}
+				}
+
+			}
+
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void chargerListeFormation() {
 		BufferedReader reader = null;
-		File file = new File("/Project_Cv/WebContent/WEB-INF/xml/formation.xml");
+		File file = new File("C:/DevFormation/GIT/Perso/Project_Cv/WebContent/WEB-INF/xml/formation.xml");
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			String chaine = reader.readLine();
@@ -105,7 +166,7 @@ public class ServletListeFormation extends HttpServlet {
 		while (line != null) {
 			if (line.contains("%%date%%") || line.contains("%%lieu%%") || line.contains("%%domaine%%")
 					|| line.contains("%%name%%") || line.contains("%%valeur%%")) {
-				affListeFormation(out);
+				affListeFormation(out, line);
 
 			} else {
 				out.println(line);
@@ -116,29 +177,44 @@ public class ServletListeFormation extends HttpServlet {
 
 	}
 
-	private void affListeFormation(PrintWriter out) {
-		for (Formation formation : listeFormation) {
-			out.println("<tr><th style=\"width: 5%\">sel</th><th style=\"width: 20%\">"+formation.getDateFormation()+"</th><th style=\"width 50%\">"+formation.getLieuFormation()+"</th><th style=\"width: 30%\">"+formation.getDomaineFormation()+"</th></tr>");
-			// out.println("<tr>");
-			// out.println("<th style=\"width:5%\">sel</td>");
-			// out.println("<th style=\"width:30%\">" +
-			// formation.getDateFormation() + "</th>");
-			// out.println("<th style=\"width:30%\">" +
-			// formation.getLieuFormation() + "</th></tr>");
-			// out.println("<th style=\"width:30%\">" +
-			// formation.getDomaineFormation() + "</th></tr>");
-			// out.println("</tr>");
+	private void affListeFormation(PrintWriter out, String line) {
+		for (int i = 0; i < listeFormation.size(); i++) {
+			// out.println("<tr><th style=\"width: 5%\">sel</th><th
+			// style=\"width: 20%\">" + formation.getDateFormation()
+			// + "</th><th style=\"width 50%\">" + formation.getLieuFormation()
+			// + "</th><th style=\"width: 30%\">"
+			// + formation.getDomaineFormation() + "</th></tr>");
+			Formation formation = listeFormation.get(i);
+			String ligneAAfficher = line;
+			ligneAAfficher = ligneAAfficher.replace("%%name%%", "un chiffre");
+			ligneAAfficher = ligneAAfficher.replace("%%valeur%%", Integer.toString(i));
+			ligneAAfficher = ligneAAfficher.replace("%%date%%", formation.getDateFormation());
+			ligneAAfficher = ligneAAfficher.replace("%%lieu%%", formation.getLieuFormation());
+			ligneAAfficher = ligneAAfficher.replace("%%domaine%%", formation.getDomaineFormation());
+
+			out.println(ligneAAfficher);
+
 		}
 
 	}
 
-	private String extraitAttHtml(String line, String ch) {
-		String res = "";
-		String newLine = line.replace("\"", "%");
-		int deb = newLine.indexOf((ch));
-		int fin = newLine.indexOf("%", deb + ch.length());
-		res = newLine.substring(deb + ch.length(), fin);
-		return res;
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		PrintWriter out = resp.getWriter();
+		File file = new File("../GIT/Perso/Project_Cv/WebContent/WEB-INF/Page/pageListeEtudiant.html");
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		String line = reader.readLine();
+		while (line != null) {
+			for (Formation formation : listeFormation) {
+				if (line.contains("%%nom%%") || line.contains("%%prenom%%") || line.contains("%%metier%%")
+						|| line.contains("%%mail%%") || line.contains("%%valeur%%")) {
+
+				}
+
+			}
+
+			super.doPost(req, resp);
+		}
 	}
 
 }

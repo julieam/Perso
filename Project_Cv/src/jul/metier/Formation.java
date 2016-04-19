@@ -5,16 +5,20 @@ public class Formation {
 	private String lieuFormation;
 	private String domaineFormation;
 
+	private ListeEtudiants listeEtudiants;
+
 	public Formation() {
 		dateFormation = "";
 		lieuFormation = "";
 		domaineFormation = "";
+		listeEtudiants=new ListeEtudiants();
 	}
 
 	public Formation(String dateForamtion, String lieuFormation, String domaineFormation) {
 		this.dateFormation = dateForamtion;
 		this.lieuFormation = lieuFormation;
 		this.domaineFormation = domaineFormation;
+		listeEtudiants=new ListeEtudiants();
 	}
 
 	public String getDateFormation() {
@@ -39,6 +43,14 @@ public class Formation {
 
 	public void setDomaineFormation(String domaineFormation) {
 		this.domaineFormation = domaineFormation;
+	}
+
+	public ListeEtudiants getListeEtudiants() {
+		return listeEtudiants;
+	}
+
+	public void setListeEtudiants(ListeEtudiants listeEtudiants) {
+		this.listeEtudiants = listeEtudiants;
 	}
 
 }

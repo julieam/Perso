@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listeEtudiant>
+	<formation id="0">
+		<etudiant nom="Dupont" prenom="Michael" metier="Chimiste" mail="dupont@gmail.fr" />
+	</formation>
+	<formation id="1">
+		<etudiant nom="Capel" prenom="Adeline" metier="Mathematiques" mail="adeline@gmail.fr" />
+	</formation>
+
+</listeEtudiant>
