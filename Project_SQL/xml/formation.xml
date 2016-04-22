@@ -8,8 +8,8 @@
 ]>
 
 <ListeFormation>
-	<Formation dateFormation="D&eacute;cembre &agrave; F&eacute;vrier 2016" lieuFormation="Strasbourg" domaineFormation="Java JEE" />
-	<Formation dateFormation="Mars &agrave; Avril 2016" lieuFormation="Lyon" domaineFormation="Java JEE" />
-	<Formation dateFormation="Avril &agrave; Mai 2016" lieuFormation="Lyon" domaineFormation="dot.net" />
+	<Formation dateFormation="Decembre a Fevrier 2016" lieuFormation="Strasbourg" domaineFormation="Java JEE" />
+	<Formation dateFormation="Mars a Avril 2016" lieuFormation="Lyon" domaineFormation="Java JEE" />
+	<Formation dateFormation="Avril a Mai 2016" lieuFormation="Lyon" domaineFormation="dot.net" />
 </ListeFormation>
 
